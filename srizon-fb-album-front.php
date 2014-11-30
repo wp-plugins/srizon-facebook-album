@@ -19,7 +19,7 @@ function srz_fb_album_shortcode($atts) {
 	}
 	if (!isset($GLOBALS['imggroup'])) $GLOBALS['imggroup'] = 1;
 	else $GLOBALS['imggroup']++;
-	$images = srz_fb_get_album_api($album['albumid'], $album['shuffle_images'], $album['updatefeed'] * 60);
+	$images = srz_fb_get_album_api($album['albumid'], $album['image_sorting'], $album['updatefeed'] * 60);
 	$common_options = SrizonFBDB::GetCommonOpt();
 	if ($common_options['loadlightbox'] == 'mp') {
 		$common_options['secondclass'] = ' mpjfb';
@@ -98,7 +98,7 @@ function srz_fb_extract_ids($lines) {
 	return $id_arr;
 }
 
-function srz_fb_get_album_api($albumids, $shuffle_images, $cachetime) {
+function srz_fb_get_album_api($albumids, $sorting_photos, $cachetime) {
 	$albumids_arr = srz_fb_extract_ids($albumids);
 	if (count($albumids_arr) == 0 && isset($_GET['debugjfb'])) {
 		echo 'No valid AlbumID found. Please check the corresponding parameter.';
@@ -106,17 +106,41 @@ function srz_fb_get_album_api($albumids, $shuffle_images, $cachetime) {
 	$images = array();
 	$i = 0;
 	foreach ($albumids_arr as $albumid) {
+		$srz_cache_dir = dirname(__FILE__) . '/cache/';
 		$albumidback = $albumid . 'back';
-		$contents = get_transient(md5($albumid));
+		/* delete cached file if expired*/
+		if (is_file($srz_cache_dir.md5($albumid))) {
+			$utime = filemtime($srz_cache_dir.md5($albumid));
+			$chtime = time() - $cachetime;
+			if($utime < $chtime) unlink($srz_cache_dir.md5($albumid));
+		}
+		/* get cached content from file or db*/
+		if (is_writable($srz_cache_dir)) {
+			$contents = @file_get_contents($srz_cache_dir.md5($albumid));
+		} else {
+			$contents = get_transient(md5($albumid));
+		}
+		/* Cached content not found so re-sync*/
 		if (!$contents or isset($_GET['forcesync'])) {
 			$url = 'http://graph.facebook.com/' . $albumid . '/photos?fields=images';
 			$contents = srz_fb_remote_to_data($url);
+			/* re-sync failed so load backup data*/
 			if (strlen($contents) <= 150) {
-				$contents = get_transient(md5($albumidback));
+				if (is_writable($srz_cache_dir)) {
+					$contents = @file_get_contents($srz_cache_dir.md5($albumidback));
+				} else {
+					$contents = get_transient(md5($albumidback));
+				}
 			}
+			/* cache the re-synced or backup data*/
 			if (strlen($contents) > 150) {
-				set_transient(md5($albumid), $contents, $cachetime);
-				set_transient(md5($albumidback), $contents, 1000000);
+				if (is_writable($srz_cache_dir)) {
+					file_put_contents($srz_cache_dir.md5($albumid),$contents);
+					file_put_contents($srz_cache_dir.md5($albumidback),$contents);
+				}else {
+					set_transient(md5($albumid), $contents, $cachetime);
+					set_transient(md5($albumidback), $contents, 1000000);
+				}
 			}
 		}
 		if (isset($_GET['debugjfb'])) {
@@ -130,7 +154,7 @@ function srz_fb_get_album_api($albumids, $shuffle_images, $cachetime) {
 				foreach ($json->data as $obj) {
 					$images[$i]['src'] = $obj->images[0]->source;
 					$images[$i]['src'] = str_replace('https', 'http', $images[$i]['src']);
-					for($range=1;$range<12;$range++) {
+					for ($range = 0; $range < 12; $range++) {
 						if (isset($obj->images[$range]->source)) {
 							$images[$i]['thumb'] = $obj->images[$range]->source;
 						}
@@ -151,39 +175,52 @@ function srz_fb_get_album_api($albumids, $shuffle_images, $cachetime) {
 			}
 		}
 	}
+	/* + Sorting/Shuffling */
+	if ($sorting_photos == 'modified' or $sorting_photos == 'modifiedr') {
+		usort($images, 'srz_sort_updated_time');
+	} else if ($sorting_photos == 'created' or $sorting_photos == 'createdr') {
+		usort($images, 'srz_sort_created_time');
+	}
+	if ($sorting_photos == 'defaultr' or $sorting_photos == 'modifiedr' or $sorting_photos == 'createdr') {
+		$images = array_reverse($images);
+	}
+	if ($sorting_photos == 'shuffle') shuffle($images);
+	/* - Sorting/Shuffling */
 	if (isset($_GET['debugjfb'])) {
 		echo '<pre>';
 		print_r($images);
 		echo '</pre>';
 	}
-	if ($shuffle_images == 'yes') shuffle($images);
 	return $images;
 }
 
 function srz_fb_remote_to_data($url) {
 	if (isset($_GET['debugjfb'])) {
-		echo 'getting remote data from:' . $url;
+		echo 'getting remote data from:<pre>' . $url . '<br />' . '<a target="_blank" href="' . $url . '">Check it in your browser</a></pre>';
 	}
-	$data = @file_get_contents($url);
+	$data = false;
+	$data1 = wp_remote_get($url);
+	if (is_array($data1) and isset($data1['body'])) {
+		$data = $data1['body'];
+	}
 	if (!$data) {
-		require_once(dirname(__FILE__) . '/mycurl.php');
 		if (isset($_GET['debugjfb'])) {
-			echo "\n" . 'file_get_contents failed... trying wp_remote_get and curl';
-		}
-		$data1 = wp_remote_get($url);
-		if (is_array($data1) and isset($data1['body'])) {
-			$data = $data1['body'];
-		} else {
-			$fbcurl = new SrzFBMycurl($url);
-			$fbcurl->createCurl();
-			$fbcurl->setUserAgent('');
-			$fbcurl->setCookiFileLocation('');
-			$fbcurl->setReferer('');
-			$data = $fbcurl->tostring();
-			if (isset($_GET['debugjfb'])) {
-				echo "\n" . 'wp_remote_get and curl failed to get the api response. either the pageid or albumid is wrong or your server is blocking all remote connection functions!';
-			}
+			echo '<br />wp_remote_get failed to get the api response. either the pageid or albumid is wrong or your server is blocking all remote connection functions!. You need to turn On allow_url_fopen from php.ini or install and enable php cURL library';
 		}
 	}
 	return $data;
+}
+
+function srz_sort_created_time($a, $b) {
+	$atime = strtotime($a['created_time']);
+	$btime = strtotime($b['created_time']);
+	if ($atime < $btime) return -1;
+	else return 1;
+}
+
+function srz_sort_updated_time($a, $b) {
+	$atime = strtotime($a['updated_time']);
+	$btime = strtotime($b['updated_time']);
+	if ($atime < $btime) return -1;
+	else return 1;
 }

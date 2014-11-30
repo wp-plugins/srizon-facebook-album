@@ -5,16 +5,21 @@ class SrizonFBDB {
 		$optvar = array();
 		$optvar['loadlightbox'] = $_POST['loadlightbox'];
 		$optvar['lightboxattrib'] = $_POST['lightboxattrib'];
+		$optvar['backtogallerytxt'] = $_POST['backtogallerytxt'];
 		update_option('srzfbcomm', $optvar);
 		return $optvar;
 	}
 
 	static function GetCommonOpt() {
 		$optvar = get_option('srzfbcomm');
-		if (!empty($optvar)) return $optvar;
+		if (!empty($optvar)) {
+			if(!isset($optvar['backtogallerytxt'])) $optvar['backtogallerytxt'] = '[Back To Gallery]';
+			return $optvar;
+		}
 		else {
 			$optvardef = array();
 			$optvardef['loadlightbox'] = 'mp';
+			$optvardef['backtogallerytxt'] = '[Back To Gallery]';
 			$optvardef['lightboxattrib'] = 'class="lightbox" rel="lightbox"';
 			add_option('srzfbcomm', $optvardef, '', true);
 			return $optvardef;

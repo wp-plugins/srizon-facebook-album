@@ -15,35 +15,7 @@ SrizonFBUI::BoxHeader('box2', "Fanpage ID", true);
 <?php
 SrizonFBUI::BoxFooter();
 SrizonFBUI::BoxHeader('box3', "Albums to include/exclude: Put Album ID(s)", true);
-if (!file_exists(dirname(__FILE__) . '/srizon-fb-album-front-pro.php')) {
-	echo '<em>Only in pro version</em>';
-} else {
-	?>
-	<div>
-		<div>If the album link(URL) is <span style="color:blue;">http://www.facebook.com/media/set/?set=a.<strong>number1</strong>.number2.number3...</span>
-			then the ID is <strong>number1</strong> which should be put in this field.
-		</div>
-		<textarea name="options[excludeids]" rows="5"
-				  cols="20"><?php if (isset($value_arr['excludeids'])) echo $value_arr['excludeids']; ?></textarea>
-
-		<div>Separate multiple IDs with newline or whitespace</div>
-	</div>
-
-	<?php
-	$chk1 = $chk2 = '';
-	if ($value_arr['include_exclude'] == 'include') {
-		$chk2 = ' checked="checked"';
-	} else {
-		$chk1 = ' checked="checked"';
-	}
-	?>
-	<br/>
-	<input type="radio" name="options[include_exclude]" value="exclude"<?php echo $chk1; ?> />Exclude These Albums
-	<br/>
-	<input type="radio" name="options[include_exclude]" value="include"<?php echo $chk2; ?> />Show Only These Albums
-
-<?php
-}
+echo '<em>Only in pro version</em>';
 SrizonFBUI::BoxFooter();
 SrizonFBUI::BoxHeader('box4', "Options", true);
 ?>
@@ -58,36 +30,34 @@ SrizonFBUI::BoxHeader('box4', "Options", true);
 	</tr>
 	<tr>
 		<td>
-			<span class="label">Shuffle Photos inside albums?</span>
+			<span class="label">Album (Cover) Sorting</span>
 		</td>
 		<td>
-			<?php
-			$chk1 = $chk2 = '';
-			if ($value_arr['shuffle_images'] == 'no') {
-				$chk2 = ' checked="checked"';
-			} else {
-				$chk1 = ' checked="checked"';
-			}
-			?>
-			<input type="radio" name="options[shuffle_images]" value="yes"<?php echo $chk1; ?> />Yes
-			<input type="radio" name="options[shuffle_images]" value="no"<?php echo $chk2; ?> />No
+			<select name="options[album_sorting]">
+				<option value="default" <?php if($value_arr['album_sorting'] == 'default') echo 'selected="selected"'?>>Default (As given by FB API)</option>
+				<option value="defaultr" <?php if($value_arr['album_sorting'] == 'defaultr') echo 'selected="selected"'?>>Default Reversed</option>
+				<option value="modified" <?php if($value_arr['album_sorting'] == 'modified') echo 'selected="selected"'?>>Modification Time</option>
+				<option value="modifiedr" <?php if($value_arr['album_sorting'] == 'modifiedr') echo 'selected="selected"'?>>Modification Time Reversed</option>
+				<option value="created" <?php if($value_arr['album_sorting'] == 'created') echo 'selected="selected"'?>>Creation Time</option>
+				<option value="createdr" <?php if($value_arr['album_sorting'] == 'createdr') echo 'selected="selected"'?>>Creation Time Reversed</option>
+				<option value="shuffle" <?php if($value_arr['album_sorting'] == 'shuffle') echo 'selected="selected"'?>>Shuffle on each load</option>
+			</select>
 		</td>
 	</tr>
 	<tr>
 		<td>
-			<span class="label">Shuffle Album List?</span>
+			<span class="label">Images Sorting (Inside each Album)</span>
 		</td>
 		<td>
-			<?php
-			$chk1 = $chk2 = '';
-			if ($value_arr['shuffle_albums'] == 'no') {
-				$chk2 = ' checked="checked"';
-			} else {
-				$chk1 = ' checked="checked"';
-			}
-			?>
-			<input type="radio" name="options[shuffle_albums]" value="yes"<?php echo $chk1; ?> />Yes
-			<input type="radio" name="options[shuffle_albums]" value="no"<?php echo $chk2; ?> />No
+			<select name="options[image_sorting]">
+				<option value="default" <?php if($value_arr['image_sorting'] == 'default') echo 'selected="selected"'?>>Default (As given by FB API)</option>
+				<option value="defaultr" <?php if($value_arr['image_sorting'] == 'defaultr') echo 'selected="selected"'?>>Default Reversed</option>
+				<option value="modified" <?php if($value_arr['image_sorting'] == 'modified') echo 'selected="selected"'?>>Modification Time</option>
+				<option value="modifiedr" <?php if($value_arr['image_sorting'] == 'modifiedr') echo 'selected="selected"'?>>Modification Time Reversed</option>
+				<option value="created" <?php if($value_arr['image_sorting'] == 'created') echo 'selected="selected"'?>>Creation Time</option>
+				<option value="createdr" <?php if($value_arr['image_sorting'] == 'createdr') echo 'selected="selected"'?>>Creation Time Reversed</option>
+				<option value="shuffle" <?php if($value_arr['image_sorting'] == 'shuffle') echo 'selected="selected"'?>>Shuffle on each load</option>
+			</select>
 		</td>
 	</tr>
 	<tr>

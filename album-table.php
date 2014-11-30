@@ -1,7 +1,7 @@
-<table class="wp-list-table widefat fixed">
+<table class="wp-list-table widefat">
 	<thead>
 	<tr>
-		<th style="width:5em;">ID</th>
+		<th style="width:5%;">ID</th>
 		<th>Title</th>
 		<th>Shortcode</th>
 		<th>Action</th>
@@ -23,7 +23,7 @@
 			<td>
 				<a href="admin.php?page=SrzFb-Albums&srzf=edit&id=<?php echo $album->id ?>"><?php echo $album->title; ?></a>
 			</td>
-			<td><input type="text" value="[srizonfbalbum id=<?php echo $album->id ?>]" disabled="disabled"/></td>
+			<td><input type="text" value="[srizonfbalbum id=<?php echo $album->id ?>]" /></td>
 			<td width="100"><a href="admin.php?page=SrzFb-Albums&srzf=delete&id=<?php echo $album->id ?>"
 							   onclick="return confirm('Are you sure you want to delete?');">Delete</a> - <a
 					href="admin.php?page=SrzFb-Albums&srzf=sync&id=<?php echo $album->id ?>">ReSync</a></td>

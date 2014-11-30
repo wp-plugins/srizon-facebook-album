@@ -3,7 +3,7 @@
 Plugin Name: Srizon Facebook Album
 Plugin URI: http://www.srizon.com/wordpress-plugin/srizon-facebook-album
 Description: Show your Facebook Albums/Galleries on your WordPress Site
-Version: 1.3.1
+Version: 1.4.0
 Author: Afzal
 Author URI: http://www.srizon.com/contact
 */
@@ -22,8 +22,8 @@ function srz_fb_install() {
 }
 
 function srz_fb_uninstall() {
-	SrizonFBDB::DeleteDBTables();
-	delete_option('srzfbcomm');
+	//SrizonFBDB::DeleteDBTables();
+	//delete_option('srzfbcomm');
 }
 
 function srz_fb_menu() {
@@ -35,7 +35,7 @@ function srz_fb_menu() {
 function srz_fb_options_page() {
 	SrizonFBUI::PageWrapStart();
 	if ($_POST['submit']) {
-		if (wp_verify_nonce($_POST['srjfb_submit'], 'SrjFb') == false) die('Nice Try!');
+		if (wp_verify_nonce($_POST['srjfb_submit'], 'SrjFb') == false) die('Form token mismatch!');
 		$optvar = SrizonFBDB::SaveCommonOpt();
 	} else {
 		$optvar = SrizonFBDB::GetCommonOpt();
@@ -101,13 +101,14 @@ function srz_fb_albums_edit() {
 	if (isset($_GET['id'])) {
 		echo '<div id="icon-edit-pages" class="icon32 icon32-posts-page"><br></div><h2>Edit Album</h2>';
 		$value_arr = SrizonFBDB::GetAlbum($_GET['id']);
+		if(!isset($value_arr['image_sorting'])) $value_arr['image_sorting']='default';
 	} else {
 		echo '<div id="icon-edit-pages" class="icon32 icon32-posts-page"><br></div><h2>Add New Album</h2>';
 		$value_arr = array(
 			'title' => '',
 			'albumid' => '',
 			'updatefeed' => '600',
-			'shuffle_images' => 'no',
+			'image_sorting' => 'default',
 			'thumbwidth' => '150',
 			'thumbheight' => '150',
 			'totalimg' => '18',
@@ -188,6 +189,8 @@ function srz_fb_galleries_edit() {
 	if (isset($_REQUEST['id'])) {
 		echo '<div id="icon-edit-pages" class="icon32 icon32-posts-page"><br></div><h2>Edit Gallery</h2>';
 		$value_arr = SrizonFBDB::GetGallery($_GET['id']);
+		if(!isset($value_arr['image_sorting'])) $value_arr['image_sorting']='default';
+		if(!isset($value_arr['album_sorting'])) $value_arr['album_sorting']='default';
 	} else {
 		echo '<div id="icon-edit-pages" class="icon32 icon32-posts-page"><br></div><h2>Add New Gallery</h2>';
 		$value_arr = array(
@@ -195,14 +198,14 @@ function srz_fb_galleries_edit() {
 			'pageid' => '',
 			'excludeids' => '',
 			'updatefeed' => '600',
-			'shuffle_images' => 'no',
+			'image_sorting' => 'default',
+			'album_sorting' => 'default',
 			'thumbwidth' => '150',
 			'thumbheight' => '150',
 			'totalimg' => '20',
 			'liststyle' => 'slidergridv',
 			'tpltheme' => 'white',
 			'paginatenum' => '18',
-			'shuffle_albums' => 'no',
 			'showtitlethumb' => 'yes',
 			'titlethumb_height' => '50',
 			'truncate_len' => '',

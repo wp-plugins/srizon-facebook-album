@@ -12,30 +12,17 @@ function srz_fb_gallery_shortcode($atts) {
 	}
 	if (!isset($GLOBALS['imggroup'])) $GLOBALS['imggroup'] = 1;
 	else $GLOBALS['imggroup']++;
-	if ($set == '') $images = srz_fb_get_fb_gallery($page['pageid'], $page['shuffle_albums'], $page['updatefeed'] * 60);
-	else $images = srz_fb_get_album_api($set, $page['shuffle_images'], $page['updatefeed'] * 60);
+	if ($set == '') $images = srz_fb_get_fb_gallery($page['pageid'], $page['album_sorting'], $page['updatefeed'] * 60);
+	else $images = srz_fb_get_album_api($set, $page['image_sorting'], $page['updatefeed'] * 60);
 	//$images = array_slice($images_all,0,$page['totalimg']);
 	$common_options = SrizonFBDB::GetCommonOpt();
-	if ($common_options['loadlightbox'] == 'mp') {
+	if ($common_options['loadlightbox'] != 'no') {
 		$common_options['secondclass'] = ' mpjfb';
 		$common_options['lightboxattrib'] = '';
 	} else {
 		$common_options['lightboxattrib'] = stripslashes($common_options['lightboxattrib']);
 	}
 	$output = srz_fb_render_fullpage_gallery($page, $images, $common_options);
-	/*switch($page['liststyle']){
-		case 'horizontal':
-			$output = srz_fb_render_fullpage_gallery($page,$images,$common_options);
-			break;
-		case 'slidergrid':
-			$output = render_slidergrid_gallery($page,$images,$common_options);
-			break;
-		case 'slidergridv':
-			$output = render_slidergridv_gallery($page,$images,$common_options);
-			break;
-		default:
-			break;
-	}*/
 	return $output;
 }
 
@@ -53,7 +40,7 @@ function srz_fb_render_fullpage_gallery($page, $images, $common_options) {
 		} else if ($pos1 = strpos($url, '&id=')) {
 			$url = substr($url, 0, $pos1);
 		}
-		$pagetitle .= ' - <a href="' . $url . '">[Back to Gallery]</a>';
+		$pagetitle .= ' - <a href="' . $url . '">'.$common_options['backtogallerytxt'].'</a>';
 		$data .= '<h2 class="entry-title" style="font-size:18px;">' . $pagetitle . '</h2>';
 	}
 	if ($set) $data .= '<div class="jfbalbum' . $common_options['secondclass'] . '" id="jfbalbum-' . $GLOBALS['imggroup'] . '">';
@@ -136,17 +123,41 @@ function srz_fb_render_fullpage_gallery($page, $images, $common_options) {
 }
 
 function srz_fb_get_pagetitle($pageid, $set, $cachetime) {
+	$srz_cache_dir = dirname(__FILE__) . '/cache/';
 	$pageidback = $pageid . 'back';
-	$contents = get_transient(md5($pageid));
+	/* delete cached file if expired*/
+	if (is_file($srz_cache_dir.md5($pageid))) {
+		$utime = filemtime($srz_cache_dir.md5($pageid));
+		$chtime = time() - $cachetime;
+		if($utime < $chtime) unlink($srz_cache_dir.md5($pageid));
+	}
+	/* get cached content from file or db*/
+	if (is_writable($srz_cache_dir)) {
+		$contents = @file_get_contents($srz_cache_dir.md5($pageid));
+	} else {
+		$contents = get_transient(md5($pageid));
+	}
+	/* Cached content not found so re-sync*/
 	if (!$contents or isset($_GET['forcesync'])) {
 		$url = "http://graph.facebook.com/" . $pageid . "/albums?fields=name,id,count,cover_photo";
 		$contents = srz_fb_remote_to_data($url);
+		/* re-sync failed so load backup data*/
 		if (strlen($contents) <= 150) {
-			$contents = get_transient(md5($pageidback));
+			if (is_writable($srz_cache_dir)) {
+				$contents = @file_get_contents($srz_cache_dir.md5($pageidback));
+			} else {
+				$contents = get_transient(md5($pageidback));
+			}
 		}
+		/* cache the re-synced or backup data*/
 		if (strlen($contents) > 150) {
-			set_transient(md5($pageid), $contents, $cachetime);
-			set_transient(md5($pageidback), $contents, 1000000);
+			if (is_writable($srz_cache_dir)) {
+				file_put_contents($srz_cache_dir.md5($pageid),$contents);
+				file_put_contents($srz_cache_dir.md5($pageidback),$contents);
+			}else {
+				set_transient(md5($pageid), $contents, $cachetime);
+				set_transient(md5($pageidback), $contents, 1000000);
+			}
 		}
 	}
 	$json = json_decode($contents);
@@ -156,24 +167,47 @@ function srz_fb_get_pagetitle($pageid, $set, $cachetime) {
 	return '';
 }
 
-function srz_fb_get_fb_gallery($pageid, $shuffle_albums, $cachetime) {
+function srz_fb_get_fb_gallery($pageid, $sorting_albums, $cachetime) {
 	if (isset($_GET['debugjfb'])) {
 		echo 'Dumping page ID<pre>';
 		print_r($pageid);
 		echo '</pre>';
 	}
+	$srz_cache_dir = dirname(__FILE__) . '/cache/';
 	$pageidback = $pageid . 'back';
-	$albumids_arr = srz_fb_extract_ids($albumids_exclude);
-	$contents = get_transient(md5($pageid));
+	/* delete cached file if expired*/
+	if (is_file($srz_cache_dir.md5($pageid))) {
+		$utime = filemtime($srz_cache_dir.md5($pageid));
+		$chtime = time() - $cachetime;
+		if($utime < $chtime) unlink($srz_cache_dir.md5($pageid));
+	}
+	/* get cached content from file or db*/
+	if (is_writable($srz_cache_dir)) {
+		$contents = @file_get_contents($srz_cache_dir.md5($pageid));
+	} else {
+		$contents = get_transient(md5($pageid));
+	}
+	/* Cached content not found so re-sync*/
 	if (!$contents or isset($_GET['forcesync'])) {
 		$url = "http://graph.facebook.com/" . $pageid . "/albums?fields=name,id,count,cover_photo";
 		$contents = srz_fb_remote_to_data($url);
+		/* re-sync failed so load backup data*/
 		if (strlen($contents) <= 150) {
-			$contents = get_transient(md5($pageidback));
+			if (is_writable($srz_cache_dir)) {
+				$contents = @file_get_contents($srz_cache_dir.md5($pageidback));
+			} else {
+				$contents = get_transient(md5($pageidback));
+			}
 		}
+		/* cache the re-synced or backup data*/
 		if (strlen($contents) > 150) {
-			set_transient(md5($pageid), $contents, $cachetime);
-			set_transient(md5($pageidback), $contents, 1000000);
+			if (is_writable($srz_cache_dir)) {
+				file_put_contents($srz_cache_dir.md5($pageid),$contents);
+				file_put_contents($srz_cache_dir.md5($pageidback),$contents);
+			}else {
+				set_transient(md5($pageid), $contents, $cachetime);
+				set_transient(md5($pageidback), $contents, 1000000);
+			}
 		}
 	}
 	if (isset($_GET['debugjfb'])) {
@@ -200,11 +234,21 @@ function srz_fb_get_fb_gallery($pageid, $shuffle_albums, $cachetime) {
 			echo "Got an empty response from Facebook. Either the pageID is invalid or your server has connectivity problem with facebook";
 		}
 	}
+	/* + Sorting/Shuffling */
+	if ($sorting_albums == 'modified' or $sorting_albums == 'modifiedr') {
+		usort($images, 'srz_sort_updated_time');
+	} else if ($sorting_albums == 'created' or $sorting_albums == 'createdr') {
+		usort($images, 'srz_sort_created_time');
+	}
+	if($sorting_albums == 'defaultr' or $sorting_albums == 'modifiedr' or $sorting_albums == 'createdr') {
+		$images = array_reverse($images);
+	}
+	if ($sorting_albums == 'shuffle') shuffle($images);
+	/* - Sorting/Shuffling */
 	if (isset($_GET['debugjfb'])) {
 		echo 'Dumping Images<pre>';
 		print_r($images);
 		echo '</pre>';
 	}
-	if ($shuffle_albums == 'yes') shuffle($images);
 	return $images;
 }

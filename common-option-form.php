@@ -60,8 +60,17 @@ SrizonFBUI::BoxHeader('box2', "Lightbox Options (Common for all albums)", true);
 				<span class="label">Lightbox Link Attribute <br/> <em>(Might be required for Other Lightbox)</em></span>
 			</td>
 			<td>
-				<input type="text" name="lightboxattrib"
+				<input type="text" size="30" name="lightboxattrib"
 					   value='<?php echo stripslashes($optvar['lightboxattrib']); ?>'/>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<span class="label">Back To Gallery Text <br/> <em>(Text to show on frontend for going back to gallery)</em></span>
+			</td>
+			<td>
+				<input type="text" size="30" name="backtogallerytxt"
+					   value='<?php echo stripslashes($optvar['backtogallerytxt']); ?>'/>
 			</td>
 		</tr>
 		<tr>
@@ -91,7 +100,7 @@ SrizonFBUI::BoxHeader('box3', "How to setup other lightbox: (An example showing 
 				<li>Select 'Extra Calls' Tab</li>
 				<li>Check (activate) 'Additional FancyBox Calls'</li>
 				<li>A textbox will expand. Put the following code there <br/>
-					<textarea disabled="disabled" rows="7" cols="50">jQuery(".jfbalbum > div.imgboxouter >
+					<textarea rows="9" cols="50">jQuery(".jfbalbum > div.imgboxouter >
 						a").fancybox({
 						'transitionIn': 'elastic',
 						'transitionOut': 'elastic',

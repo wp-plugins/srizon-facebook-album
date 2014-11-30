@@ -4,7 +4,7 @@ Donate link: http://www.srizon.com/wordpress-plugin/srizon-facebook-album
 Tags: Facebook, Album, Gallery, Photo Album, Photo Gallery, Facebook Connect, Facebook Album, Facebook Gallery
 Requires at least: 3.3
 Tested up to: 4.0
-Stable tag: 1.3.1
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,3 +91,8 @@ if your template doesn't support [raw] tag then you may also need to install thi
 
 = 1.3.1 =
 *Changed some code to cope with facebook's recent change
+
+= 1.4.0 =
+*Cache data on file (if writable) for faster loading - It was database only previously
+*Album and Image sorting option added
+*Change the text for 'back to gallery' link in gallery view
