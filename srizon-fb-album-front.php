@@ -199,13 +199,16 @@ function srz_fb_remote_to_data($url) {
 		echo 'getting remote data from:<pre>' . $url . '<br />' . '<a target="_blank" href="' . $url . '">Check it in your browser</a></pre>';
 	}
 	$data = false;
-	$data1 = wp_remote_get($url);
+	$data1 = wp_remote_get($url,array('timeout'=>30));
 	if (is_array($data1) and isset($data1['body'])) {
 		$data = $data1['body'];
 	}
 	if (!$data) {
 		if (isset($_GET['debugjfb'])) {
 			echo '<br />wp_remote_get failed to get the api response. either the pageid or albumid is wrong or your server is blocking all remote connection functions!. You need to turn On allow_url_fopen from php.ini or install and enable php cURL library';
+			echo '<pre>';
+			print_r($data1);
+			echo '</pre>';
 		}
 	}
 	return $data;
