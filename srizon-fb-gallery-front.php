@@ -3,7 +3,7 @@ function srz_fb_gallery_shortcode($atts) {
 	if (!isset($atts['id'])) return 'Invalid shortcode... ID missing';
 	$pageid = $atts['id'];
 	$page = SrizonFBDB::GetGallery($pageid);
-	$set = isset($_GET['id']) ? $_GET['id'] : '';
+	$set = isset($_GET['aid']) ? $_GET['aid'] : '';
 	if (!$page) return 'Page Not Found';
 	if (isset($_GET['debugjfb'])) {
 		echo 'Dumping Params<pre>';
@@ -27,17 +27,17 @@ function srz_fb_gallery_shortcode($atts) {
 }
 
 function srz_fb_render_fullpage_gallery($page, $images, $common_options) {
-	$set = isset($_GET['id']) ? $_GET['id'] : '';
+	$set = isset($_GET['aid']) ? $_GET['aid'] : '';
 	$data = '';
 	if ($set) {
 		$pagetitle = srz_fb_get_pagetitle($page['pageid'], $set, $page['updatefeed'] * 60);
 		if (!$pagetitle) return '';
 		$url = $_SERVER['REQUEST_URI'];//get_page_link();
-		if ($pos1 = strpos($url, '?id=')) {
+		if ($pos1 = strpos($url, '?aid=')) {
 			$url = substr($url, 0, $pos1);
-		} else if ($pos1 = strpos($url, '&amp;id=')) {
+		} else if ($pos1 = strpos($url, '&amp;aid=')) {
 			$url = substr($url, 0, $pos1);
-		} else if ($pos1 = strpos($url, '&id=')) {
+		} else if ($pos1 = strpos($url, '&aid=')) {
 			$url = substr($url, 0, $pos1);
 		}
 		$pagetitle .= ' - <a href="' . $url . '">'.$common_options['backtogallerytxt'].'</a>';
@@ -63,8 +63,8 @@ function srz_fb_render_fullpage_gallery($page, $images, $common_options) {
 			} else if (strpos($url, '?jfpage')) {
 				$url = substr($url, 0, strpos($url, '?jfpage'));
 			}
-			if (strpos($url, '?')) $url .= '&amp;id=' . $image['id'];
-			else $url .= '?id=' . $image['id'];
+			if (strpos($url, '?')) $url .= '&amp;aid=' . $image['id'];
+			else $url .= '?aid=' . $image['id'];
 			$link = '<a style="width:' . $page['thumbwidth'] . 'px; height:' . $page['thumbheight'] . 'px;" href="' . $url . '">';
 		}
 		if ($page['showtitlethumb'] == 'yes' and $set == '') {
@@ -98,8 +98,8 @@ function srz_fb_render_fullpage_gallery($page, $images, $common_options) {
 		$url = str_replace('&', '&amp;', $url);
 		if (strpos($url, '?')) $url .= '&amp;';
 		else $url .= '?';
-		$id_in_url = strpos($url, 'id=');
-		if (isset($_GET['id']) and !$id_in_url) $url .= 'id=' . $_GET['id'] . '&amp;';
+		$id_in_url = strpos($url, 'aid=');
+		if (isset($_GET['aid']) and !$id_in_url) $url .= 'aid=' . $_GET['aid'] . '&amp;';
 		$data .= '<div id="tnt_pagination">';
 		if ($getjfpage > 4) {
 			$pgstart = $getjfpage - 4;
