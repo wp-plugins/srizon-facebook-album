@@ -70,6 +70,31 @@ class SrizonFBDB {
 		foreach ($options as $key => $value) {
 			$ret[$key] = $value;
 		}
+
+		$value_arr = array(
+			'title' => '',
+			'albumid' => '',
+			'updatefeed' => '600',
+			'image_sorting' => 'default',
+			'totalimg' => '25',
+			'layout' => 'collage_thumb',
+			'tpltheme' => 'white',
+			'paginatenum' => '18',
+			'targetheight' => '200',
+			'collagepadding' => '2',
+			'collagepartiallast' =>  'false',
+			'hovercaption' =>  '1',
+			'hovercaptiontype' =>  '0',
+			'showhoverzoom' =>  '1',
+			'animationspeed' =>  '500',
+			'maxheight' =>  '500',
+			'app_id' => '',
+			'app_secret' => '',
+		);
+
+		foreach ( $value_arr as $key => $value ) {
+			if(!isset($ret[$key]) ) $ret[$key] = $value ;
+		}
 		return $ret;
 	}
 
@@ -86,6 +111,31 @@ class SrizonFBDB {
 		foreach ($options as $key => $value) {
 			$ret[$key] = $value;
 		}
+
+		$value_arr = array(
+			'include_exclude'    => 'exclude',
+			'excludeids'         => '',
+			'updatefeed'         => '600',
+			'image_sorting'      => 'default',
+			'album_sorting'      => 'default',
+			'liststyle'          => 'slidergridv',
+			'totalimg'           => '25',
+			'paginatenum'        => '18',
+			'collagepadding'     => '2',
+			'collagepartiallast' => '0',
+			'hovercaption'       => '1',
+			'hovercaptiontype'   => '0',
+			'show_image_count'   => '1',
+			'showhoverzoom'      => '1',
+			'maxheight'          => '250',
+			'app_id'             => '',
+			'app_secret'         => '',
+		);
+
+		foreach ( $value_arr as $key => $value ) {
+			if(!isset($ret[$key]) ) $ret[$key] = $value ;
+		}
+
 		return $ret;
 	}
 
@@ -114,20 +164,28 @@ class SrizonFBDB {
 		$album = SrizonFBDB::GetAlbum($id);
 		$ids = SrizonFBDB::srz_fb_extract_ids($album['albumid']);
 		foreach ($ids as $albumid) {
-			delete_transient(md5($albumid));
+			$filename = JPATH_CACHE . '/jfbalbum/' . md5($albumid);
+			unlink($filename);
+//			delete_transient($filename);
 		}
 	}
 
 	static function SyncGallery($id) {
 		$page = SrizonFBDB::GetGallery($id);
-		$contents = get_transient(md5($page['pageid']));
-		$json = json_decode($contents);
-		if (is_array($json->data)) {
-			foreach ($json->data as $obj) {
-				delete_transient(md5($obj->id));
+		$filename = JPATH_CACHE . '/jfbalbum/' . md5($page['pageid']);
+		if(!is_file($filename)) return;
+		$contents = file_get_contents($filename);
+		$imgs = json_decode($contents);
+		if (is_array($imgs)) {
+			foreach ($imgs as $obj) {
+				$filename = JPATH_CACHE . '/jfbalbum/' . md5($obj->id);
+				if(is_file($filename)) unlink($filename);
+//				delete_transient($filename);
 			}
 		}
-		delete_transient(md5($page['pageid']));
+		$filename = JPATH_CACHE . '/jfbalbum/' . md5($page['pageid']);
+		unlink($filename);
+//		delete_transient($filename);
 	}
 
 	static function srz_fb_extract_ids($lines) {

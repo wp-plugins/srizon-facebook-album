@@ -33,7 +33,7 @@
 
 	<thead>
 	<tr>
-		<th style="width:5em;">ID</th>
+		<th style="width:5%;">ID</th>
 		<th>Title</th>
 		<th>Shortcode</th>
 		<th>Action</th>

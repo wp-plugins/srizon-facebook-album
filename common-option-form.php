@@ -1,5 +1,5 @@
 <?php
-SrizonFBUI::BoxHeader('box1', "Get The Pro Version", true);
+SrizonFBUI::BoxHeader('pro-version', "Get The Pro Version", true);
 ?>
 <div>
 	<h4>Limitations of this version</h4>
@@ -21,15 +21,13 @@ SrizonFBUI::BoxHeader('box1', "Get The Pro Version", true);
 		</li>
 	</ol>
 	<h4>Get the pro version now</h4>
-	<a target="_blank" href="http://www.srizon.com/wordpress-plugin/srizon-facebook-album">http://www.srizon.com/wordpress-plugin/srizon-facebook-album</a>
+	<a target="_blank" href="http://www.srizon.com/srizon-facebook-album">http://www.srizon.com/wordpress-plugin/srizon-facebook-album</a>
 
 	<p>If you already have purchased the pro version contact the developer (afzal.csedu@gmail.com) with your purchase ID
 		or email address you used for purchasing.</p>
 </div>
 <?php
 SrizonFBUI::BoxFooter();
-?>
-<?php
 SrizonFBUI::BoxHeader('box0', "What to do");
 echo '<p><ol>
 <li>Click on the Albums or Galleries submenu</li>		
@@ -39,7 +37,8 @@ echo '<p><ol>
 <li>Try out different options to suit your need</li>
 </ol></p>';
 SrizonFBUI::BoxFooter();
-SrizonFBUI::BoxHeader('box2', "Lightbox Options (Common for all albums)", true);?>
+SrizonFBUI::BoxHeader('box2', "Lightbox Options (Common for all albums)", true);
+?>
 <form action="admin.php?page=SrzFb" method="post">
 	<table>
 		<tr>
