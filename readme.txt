@@ -48,12 +48,14 @@ Find the plugin/theme that's loading a copy of it's own jQuery. Disable that plu
 
 == Screenshots ==
 1. Gallery View (First Level)
-2. Gallery View (Second Level) - Similar To Album View
-3. Default Lightbox (Any lightbox can be added)
-4. Common Option panel (admin)
-5. Albums Page (admin)
-6. Gallery Page (admin)
-7. Adding New Gallery (Adding new album is similar)
+2. Album - Collage layout
+3. Responsive Lightbox
+4. Slider layout variations
+5. Other layouts
+6. Common options (backend -1)
+7. List of albums with shortcode (backend -2)
+8. Add/Edit album (backend -3)
+9. Add/Edit gallery (backend -4)
 
 == Changelog ==
 
