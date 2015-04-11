@@ -1,4 +1,4 @@
-=== Srizon Facebook Album Pro ===
+=== Srizon Facebook Album ===
 Contributors: afzal_du
 Donate link: http://www.srizon.com/srizon-facebook-album
 Tags: Facebook, Album, Gallery, Photo Album, Photo Gallery, Facebook Connect, Facebook Album, Facebook Gallery
