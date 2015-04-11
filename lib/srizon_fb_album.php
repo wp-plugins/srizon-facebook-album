@@ -290,14 +290,14 @@ if ( ! class_exists( 'SrizonFbAlbum' ) ) {
 				$i = count( $this->images );
 				foreach ( $json->data as $obj ) {
 					$count = isset( $obj->count ) ? $obj->count : '';
-					if ( ! $count ) {
-						continue;
-					}
+					$cover_photo = isset($obj->cover_photo) ? $obj->cover_photo : '';
+					if (!$count) continue;
+					if (!$cover_photo) continue;
 					$this->images[ $i ]['txt']          = isset( $obj->name ) ? $obj->name : 'Untitled Album';
 					$this->images[ $i ]['txt']          = htmlspecialchars( $this->images[ $i ]['txt'] );
 					$this->images[ $i ]['count']        = $count;
 					$this->images[ $i ]['id']           = $obj->id;
-					$this->cover_ids[ $i ]              = $obj->cover_photo;
+					$this->cover_ids[$i] = $cover_photo;
 					$this->images[ $i ]['created_time'] = $obj->created_time;
 					$this->images[ $i ]['updated_time'] = $obj->updated_time;
 					$i ++;
