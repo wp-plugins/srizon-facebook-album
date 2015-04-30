@@ -314,7 +314,7 @@ if ( ! class_exists( 'SrizonFbAlbum' ) ) {
 			$filename = JPATH_CACHE . '/jfbalbum/' . md5( $album_id );
 			if ( is_file( $filename ) ) {
 				$utime  = filemtime( $filename );
-				$chtime = time() - 60 * $this->sync_interval;
+				$chtime = time() - $this->sync_interval;
 				if ( $utime > $chtime ) {
 					return false;
 				}
