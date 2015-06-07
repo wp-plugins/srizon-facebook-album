@@ -27,6 +27,6 @@ function srz_fb_album_shortcode($atts) {
 	$srz_images = array_slice($srz_images_all, $srz_cur_page*$srz_album['paginatenum'], $srz_album['paginatenum']);
 	$data='';
 	include(dirname(__FILE__).'/tmpl/'.$srz_album['layout'].'.php');
-	$data .= srizon_show_pagination($srz_album['paginatenum'], $srz_totalimgall, $scroller_id, $paging_id);
+	$data .= srizon_show_pagination($srz_album['paginatenum'], $srz_totalimgall, $scroller_id, $paging_id, $srz_common_options['jumptoarea']);
 	return $data;
 }

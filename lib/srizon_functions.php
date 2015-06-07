@@ -39,16 +39,25 @@ if(!function_exists('srz_fb_set_debug_msg')) {
 //todo
 
 if (!function_exists('srizon_show_pagination')) {
-	function srizon_show_pagination($per_page, $total, $scroller_id, $paging_id) {
+	function srizon_show_pagination($per_page, $total, $scroller_id, $paging_id, $jumptoarea = 'false') {
 		if (!$total > $per_page) return;
 		require_once(dirname(__FILE__) . '/srizon_pagination.php');
 		$paginator = new SrizonPagination($per_page, $paging_id);
 		$paginator->set_total($total);
 		$url = remove_query_arg($paging_id);
-		if (strpos($url, '?')) {
-			return $paginator->page_links($url . '&', '#' . $scroller_id);
-		} else {
-			return $paginator->page_links($url . '?', '#' . $scroller_id);
+		if($jumptoarea == 'true'){
+			if (strpos($url, '?')) {
+				return $paginator->page_links($url . '&', '#' . $scroller_id);
+			} else {
+				return $paginator->page_links($url . '?', '#' . $scroller_id);
+			}
+		}
+		else{
+			if (strpos($url, '?')) {
+				return $paginator->page_links($url . '&');
+			} else {
+				return $paginator->page_links($url . '?');
+			}
 		}
 	}
 }

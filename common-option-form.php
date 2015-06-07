@@ -73,6 +73,19 @@ SrizonFBUI::BoxHeader('box2', "Lightbox Options (Common for all albums)", true);
 			</td>
 		</tr>
 		<tr>
+			<td><span class="label">Scroll to album area when an album/pagination link is clicked?</span></td>
+			<td>
+				<select id="jumptoarea" name="jumptoarea">
+					<option value="false" <?php if ( $optvar['jumptoarea'] == 'false' ) {
+						echo 'selected="selected"';
+					} ?>>No</option>
+					<option value="true" <?php if ( $optvar['jumptoarea'] == 'true' ) {
+						echo 'selected="selected"';
+					} ?>>Yes</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
 			<td>
 				<span class="label"><?php wp_nonce_field('SrjFb', 'srjfb_submit'); ?></span>
 			</td>

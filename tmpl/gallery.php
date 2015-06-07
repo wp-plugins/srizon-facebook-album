@@ -4,7 +4,12 @@
 //SrizonResourceLoader::load_srizon_custom_css();
 $url = remove_query_arg($aid);
 $url = remove_query_arg($paging_id,$url);
-$blink = $url.'#'.$scroller_id;
+if($srz_common_options['jumptoarea'] == 'true'){
+	$blink = $url.'#'.$scroller_id;
+}
+else{
+	$blink = $url;
+}
 $extraclass = '';
 if($srz_page['showhoverzoom']) $extraclass.=' zoom';
 $backlink = ' <a href="' . $blink . '">' . $srz_common_options['backtogallerytxt'] . '</a>';
@@ -22,6 +27,9 @@ foreach ($srz_images as $image) {
 	} else {
 		$u = remove_query_arg($paging_id);
 		$link = add_query_arg($aid,$image['id'],$u);
+		if($srz_common_options['jumptoarea'] == 'true'){
+			$link = $link.'#'.$scroller_id;
+		}
 		$grelval = '';
 		$image['txt'] = __('Album: ') . $image['txt'] . "\n";
 		if ($srz_page['show_image_count']) {

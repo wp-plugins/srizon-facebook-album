@@ -6,6 +6,7 @@ class SrizonFBDB {
 		$optvar['loadlightbox'] = $_POST['loadlightbox'];
 		$optvar['lightboxattrib'] = $_POST['lightboxattrib'];
 		$optvar['backtogallerytxt'] = $_POST['backtogallerytxt'];
+		$optvar['jumptoarea'] = $_POST['jumptoarea'];
 		update_option('srzfbcomm', $optvar);
 		return $optvar;
 	}
@@ -19,6 +20,7 @@ class SrizonFBDB {
 		else {
 			$optvardef = array();
 			$optvardef['loadlightbox'] = 'mp';
+			$optvardef['jumptoarea'] = 'false';
 			$optvardef['backtogallerytxt'] = '[Back To Gallery]';
 			$optvardef['lightboxattrib'] = 'class="lightbox" rel="lightbox"';
 			add_option('srzfbcomm', $optvardef, '', true);
@@ -88,12 +90,12 @@ class SrizonFBDB {
 			'showhoverzoom' =>  '1',
 			'animationspeed' =>  '500',
 			'maxheight' =>  '500',
-			'app_id' => '',
-			'app_secret' => '',
+			'app_id' => '317313518365532',
+			'app_secret' => 'd612fb7cd11ce82400131c1dda0522e8',
 		);
 
 		foreach ( $value_arr as $key => $value ) {
-			if(!isset($ret[$key]) ) $ret[$key] = $value ;
+			if(!isset($ret[$key]) or $ret[$key]=='' ) $ret[$key] = $value ;
 		}
 		return $ret;
 	}
@@ -128,12 +130,12 @@ class SrizonFBDB {
 			'show_image_count'   => '1',
 			'showhoverzoom'      => '1',
 			'maxheight'          => '250',
-			'app_id'             => '',
-			'app_secret'         => '',
+			'app_id'             => '317313518365532',
+			'app_secret'         => 'd612fb7cd11ce82400131c1dda0522e8',
 		);
 
 		foreach ( $value_arr as $key => $value ) {
-			if(!isset($ret[$key]) ) $ret[$key] = $value ;
+			if(!isset($ret[$key])  or $ret[$key]=='' ) $ret[$key] = $value ;
 		}
 
 		return $ret;

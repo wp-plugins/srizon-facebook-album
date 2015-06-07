@@ -34,6 +34,6 @@ function srz_fb_gallery_shortcode($atts) {
 	$srz_images = array_slice($srz_images_all, $srz_cur_page*$srz_page['paginatenum'], $srz_page['paginatenum']);
 	$data='';
 	include(dirname(__FILE__).'/tmpl/gallery.php');
-	$data .= srizon_show_pagination($srz_page['paginatenum'], $srz_totalimgall, $scroller_id, $paging_id);
+	$data .= srizon_show_pagination($srz_page['paginatenum'], $srz_totalimgall, $scroller_id, $paging_id, $srz_common_options['jumptoarea']);
 	return $data;
 }

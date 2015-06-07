@@ -2,9 +2,9 @@
 add_action( 'admin_menu', 'srz_fb_menu' );
 
 function srz_fb_menu() {
-	add_menu_page('FB Album Pro', "FB Album Pro", 'manage_options', 'SrzFb', 'srz_fb_options_page', srz_fb_get_resource_url('images/srzfb-icon.png'));
-	add_submenu_page('SrzFb', "FB Album Pro", "Albums", 'manage_options', 'SrzFb-Albums', 'srz_fb_albums');
-	add_submenu_page('SrzFb', "FB Album Pro", "Galleries", 'manage_options', 'SrzFb-Galleries', 'srz_fb_galleries');
+	add_menu_page('FB Album', "FB Album", 'manage_options', 'SrzFb', 'srz_fb_options_page', srz_fb_get_resource_url('images/srzfb-icon.png'));
+	add_submenu_page('SrzFb', "FB Album", "Albums", 'manage_options', 'SrzFb-Albums', 'srz_fb_albums');
+	add_submenu_page('SrzFb', "FB Album", "Galleries", 'manage_options', 'SrzFb-Galleries', 'srz_fb_galleries');
 }
 
 function srz_fb_options_page() {

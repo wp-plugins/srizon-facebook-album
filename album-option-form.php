@@ -226,9 +226,10 @@ SrizonFBUI::BoxHeader( 'box4', "Options", true );
 			<p></p>
 
 			<p></p>
-			<strong>Advanced: On a shared server/hosting/IP syncing may fail sometimes. <br/>Creating an <a
-					target="_blank" href="https://developers.facebook.com/">App on facebook</a> and providing the
-				App ID and secret (both required) below should make it work.</strong>
+			<strong>You should create your own app and put app id and secret below. <a href="https://www.youtube.com/watch?v=w_lLRt4wY70" target="_blank">Here's How</a>.
+				<br/>
+			</strong>
+			<p>If you leave these fields empty. A default set of app id/secret will be used which might be shared by other users and lead to a quota error</p>
 		</td>
 	</tr>
 	<tr>
