@@ -2,7 +2,7 @@
 
 //SrizonResourceLoader::load_collage_plus();
 //SrizonResourceLoader::load_srizon_custom_css();
-$data .= '<div class="jfbalbum jfb-big"  id="' . $scroller_id . '">';
+$data .= '<div class="fbalbum jfb-big"  id="' . $scroller_id . '">';
 foreach ($srz_images as $image) {
 	$caption = nl2br($image['txt']);
 	$data .= <<<EOL

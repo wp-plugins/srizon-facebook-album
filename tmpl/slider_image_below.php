@@ -7,17 +7,17 @@ $data .= <<<EOL
 			<ul class="elastislide-list"  id="{$scroller_id}">
 EOL;
 $i = 0;
-foreach ( $srz_images as $image ) {
-	$caption = nl2br( $image['txt'] );
-	$data .= <<<EOL
+foreach ($srz_images as $image) {
+    $caption = nl2br($image['txt']);
+    $data .= <<<EOL
 				<li>
-					<a href="javascript:;" data-index="{$i}" title="{$caption}">
+					<a href="javascript:;" data-index="{$i}">
 						<img src="{$image['thumb']}" alt="{$caption}" width="{$image['width']}" height="{$image['height']}" />
 					</a>
 				</li>
 
 EOL;
-	$i ++;
+    $i++;
 }
 $data .= <<<EOL
 			</ul>
@@ -29,7 +29,7 @@ $data .= <<<EOL
 		</div>
 	</div>
 EOL;
-$json_data = json_encode( $srz_images );
+$json_data = json_encode($srz_images);
 $data .= <<<EOL
 <script type="text/javascript">
 	jQuery('#{$scroller_id}').matchImgHeight({
@@ -39,6 +39,10 @@ $data .= <<<EOL
 	jQuery(window).load(function(){
 		jQuery( '#{$scroller_id}').unwrap().elastislide({
 			speed: {$srz_album['animationspeed']}
+		});
+
+		jQuery('#{$scroller_id}').autoscrollElastislide({
+			interval: {$srz_album['autoslideinterval']}
 		});
 
 		jQuery('#full-{$scroller_id}').srzSingleImageSlider({

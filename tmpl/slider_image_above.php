@@ -16,7 +16,7 @@ foreach ( $srz_images as $image ) {
 	$caption = nl2br( $image['txt'] );
 	$data .= <<<EOL
 				<li>
-					<a href="javascript:;" data-index="{$i}" title="{$caption}">
+					<a href="javascript:;" data-index="{$i}">
 						<img src="{$image['thumb']}" alt="{$caption}" width="{$image['width']}" height="{$image['height']}" />
 					</a>
 				</li>
@@ -39,6 +39,10 @@ $data .= <<<EOL
 	jQuery(window).load(function(){
 		jQuery( '#{$scroller_id}').unwrap().elastislide({
 			speed: {$srz_album['animationspeed']}
+		});
+
+		jQuery('#{$scroller_id}').autoscrollElastislide({
+			interval: {$srz_album['autoslideinterval']}
 		});
 
 		jQuery('#full-{$scroller_id}').srzSingleImageSlider({

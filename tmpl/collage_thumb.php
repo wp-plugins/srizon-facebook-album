@@ -4,12 +4,12 @@
 //SrizonResourceLoader::load_srizon_custom_css();
 $extraclass = '';
 if($srz_album['showhoverzoom']) $extraclass.=' zoom';
-$data .= '<div class="jfbalbum'.$extraclass.'"  id="' . $scroller_id . '">';
+$data .= '<div class="fbalbum'.$extraclass.'"  id="' . $scroller_id . '">';
 foreach ($srz_images as $image) {
 	$caption = nl2br($image['txt']);
 	$data .= <<<EOL
 		<div class="Image_Wrapper" data-caption="{$caption}">
-			<a href="{$image['src']}" title="{$caption}" {$lightbox_attribute}>
+			<a href="{$image['src']}" data-title="{$caption}" {$lightbox_attribute}>
 				<img alt="{$caption}" src="{$image['thumb']}" data-width="{$image['width']}" data-height="{$image['height']}" width="{$image['width']}" height="{$image['height']}" />
 			</a>
 		</div>

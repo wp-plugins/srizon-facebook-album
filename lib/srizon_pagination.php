@@ -31,67 +31,67 @@ if (!class_exists('SrizonPagination')) {
 			if ($lastpage > 1) {
 				$pagination .= "<ul class='srizon-pagination hidden-phone visible-desktop'>";
 				if ($this->_page > 1)
-					$pagination .= "<li><a href='" . $path . "$this->_instance=$prev" . "$ext'>".__('Prev')."</a></li>";
+					$pagination .= "<li><a href='" . $path . "$this->_instance=$prev" . "$ext'>".__('Prev','srizon-facebook-album')."</a></li>";
 				else
-					$pagination .= "<span class='disabled'>".__('Prev')."</span>";
+					$pagination .= "<span class='disabled'>".__('Prev','srizon-facebook-album')."</span>";
 				if ($lastpage < 7 + ($adjacents * 2)) {
 					for ($counter = 1; $counter <= $lastpage; $counter++) {
 						if ($counter == $this->_page)
-							$pagination .= "<li><span class='current'>$counter</span></li>";
+							$pagination .= "<li><span class='current'>".__($counter,'srizon-facebook-album')."</span></li>";
 						else
-							$pagination .= "<li><a href='" . $path . "$this->_instance=$counter" . "$ext'>$counter</a></li>";
+							$pagination .= "<li><a href='" . $path . "$this->_instance=$counter" . "$ext'>".__($counter,'srizon-facebook-album')."</a></li>";
 					}
 				} elseif ($lastpage > 5 + ($adjacents * 2)) {
 					if ($this->_page < 1 + ($adjacents * 2)) {
 						for ($counter = 1; $counter < 4 + ($adjacents * 2); $counter++) {
 							if ($counter == $this->_page)
-								$pagination .= "<li><span class='current'>$counter</span></li>";
+								$pagination .= "<li><span class='current'>".__($counter,'srizon-facebook-album')."</span></li>";
 							else
-								$pagination .= "<li><a href='" . $path . "$this->_instance=$counter" . "$ext'>$counter</a></li>";
+								$pagination .= "<li><a href='" . $path . "$this->_instance=$counter" . "$ext'>".__($counter,'srizon-facebook-album')."</a></li>";
 						}
 						$pagination .= "...";
-						$pagination .= "<li><a href='" . $path . "$this->_instance=$lpm1" . "$ext'>$lpm1</a></li>";
-						$pagination .= "<li><a href='" . $path . "$this->_instance=$lastpage" . "$ext'>$lastpage</a></li>";
+						$pagination .= "<li><a href='" . $path . "$this->_instance=$lpm1" . "$ext'>".__($lpm1,'srizon-facebook-album')."</a></li>";
+						$pagination .= "<li><a href='" . $path . "$this->_instance=$lastpage" . "$ext'>".__($lastpage,'srizon-facebook-album')."</a></li>";
 					} elseif ($lastpage - ($adjacents * 2) > $this->_page && $this->_page > ($adjacents * 2)) {
-						$pagination .= "<li><a href='" . $path . "$this->_instance=1" . "$ext'>1</a></li>";
-						$pagination .= "<li><a href='" . $path . "$this->_instance=2" . "$ext'>2</a></li>";
+						$pagination .= "<li><a href='" . $path . "$this->_instance=1" . "$ext'>".__('1','srizon-facebook-album')."</a></li>";
+						$pagination .= "<li><a href='" . $path . "$this->_instance=2" . "$ext'>".__('2','srizon-facebook-album')."</a></li>";
 						$pagination .= "...";
 						for ($counter = $this->_page - $adjacents; $counter <= $this->_page + $adjacents; $counter++) {
 							if ($counter == $this->_page)
-								$pagination .= "<span class='current'>$counter</span>";
+								$pagination .= "<span class='current'>".__($counter,'srizon-facebook-album')."</span>";
 							else
-								$pagination .= "<li><a href='" . $path . "$this->_instance=$counter" . "$ext'>$counter</a></li>";
+								$pagination .= "<li><a href='" . $path . "$this->_instance=$counter" . "$ext'>".__($counter,'srizon-facebook-album')."</a></li>";
 						}
 						$pagination .= "..";
-						$pagination .= "<li><a href='" . $path . "$this->_instance=$lpm1" . "$ext'>$lpm1</a></li>";
-						$pagination .= "<li><a href='" . $path . "$this->_instance=$lastpage" . "$ext'>$lastpage</a></li>";
+						$pagination .= "<li><a href='" . $path . "$this->_instance=$lpm1" . "$ext'>".__($lpm1,'srizon-facebook-album')."</a></li>";
+						$pagination .= "<li><a href='" . $path . "$this->_instance=$lastpage" . "$ext'>".__($lastpage,'srizon-facebook-album')."</a></li>";
 					} else {
-						$pagination .= "<li><a href='" . $path . "$this->_instance=1" . "$ext'>1</a></li>";
-						$pagination .= "<li><a href='" . $path . "$this->_instance=2" . "$ext'>2</a></li>";
+						$pagination .= "<li><a href='" . $path . "$this->_instance=1" . "$ext'>".__('1','srizon-facebook-album')."</a></li>";
+						$pagination .= "<li><a href='" . $path . "$this->_instance=2" . "$ext'>".__('2','srizon-facebook-album')."</a></li>";
 						$pagination .= "..";
 						for ($counter = $lastpage - (2 + ($adjacents * 2)); $counter <= $lastpage; $counter++) {
 							if ($counter == $this->_page)
-								$pagination .= "<span class='current'>$counter</span>";
+								$pagination .= "<span class='current'>".__($counter,'srizon-facebook-album')."</span>";
 							else
-								$pagination .= "<li><a href='" . $path . "$this->_instance=$counter" . "$ext'>$counter</a></li>";
+								$pagination .= "<li><a href='" . $path . "$this->_instance=$counter" . "$ext'>".__($counter,'srizon-facebook-album')."</a></li>";
 						}
 					}
 				}
 				if ($this->_page < $counter - 1)
-					$pagination .= "<li><a href='" . $path . "$this->_instance=$next" . "$ext'>".__('Next')."</a></li>";
+					$pagination .= "<li><a href='" . $path . "$this->_instance=$next" . "$ext'>".__('Next','srizon-facebook-album')."</a></li>";
 				else
-					$pagination .= "<li><span class='disabled'>".__('Next')."</span></li>";
+					$pagination .= "<li><span class='disabled'>".__('Next','srizon-facebook-album')."</span></li>";
 				$pagination .= "</ul>\n";
 				// for small devices
 				$pagination .= "<ul class='srizon-pagination hidden-desktop visible-phone'>";
 				if ($this->_page > 1)
-					$pagination .= "<li><a href='" . $path . "$this->_instance=$prev" . "$ext'>".__('Prev')."</a></li>";
+					$pagination .= "<li><a href='" . $path . "$this->_instance=$prev" . "$ext'>".__('Prev','srizon-facebook-album')."</a></li>";
 				else
-					$pagination .= "<span class='disabled'>".__('Prev')."</span>";
+					$pagination .= "<span class='disabled'>".__('Prev','srizon-facebook-album')."</span>";
 				if ($this->_page < $counter - 1)
-					$pagination .= "<li><a href='" . $path . "$this->_instance=$next" . "$ext'>".__('Next')."</a></li>";
+					$pagination .= "<li><a href='" . $path . "$this->_instance=$next" . "$ext'>".__('Next','srizon-facebook-album')."</a></li>";
 				else
-					$pagination .= "<li><span class='disabled'>".__('Next')."</span></li>";
+					$pagination .= "<li><span class='disabled'>".__('Next','srizon-facebook-album')."</span></li>";
 				$pagination .= "</ul>";
 			}
 			return $pagination;

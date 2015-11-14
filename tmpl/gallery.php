@@ -12,14 +12,14 @@ else{
 }
 $extraclass = '';
 if($srz_page['showhoverzoom']) $extraclass.=' zoom';
-$backlink = ' <a href="' . $blink . '">' . $srz_common_options['backtogallerytxt'] . '</a>';
+$backlink = ' <a href="' . $blink . '">' .  __('[Back To Gallery]','srizon-facebook-album') . '</a>';
 $dtg=' data-gallery="gallery"';
 if ($set) {
 	$data .= '<h2>' . $pagetitle . $backlink . '</h2>';
 	$dtg='';
 }
 
-$data .= '<div class="jfbalbum'.$extraclass.'"  id="' . $scroller_id . '">';
+$data .= '<div class="fbalbum'.$extraclass.'"  id="' . $scroller_id . '">';
 foreach ($srz_images as $image) {
 	if ($set) {
 		$link = $image['src'];
@@ -31,22 +31,27 @@ foreach ($srz_images as $image) {
 			$link = $link.'#'.$scroller_id;
 		}
 		$grelval = '';
-		$image['txt'] = __('Album: ') . $image['txt'] . "\n";
+		$image['txt'] = __('Album: ','srizon-facebook-album') . $image['txt'] . "\n";
 		if ($srz_page['show_image_count']) {
-			$image['txt'] = $image['txt'] . $image['count'] . __(' Photos');
+			$image['txt'] = $image['txt'] . $image['count'] . __(' Photos','srizon-facebook-album');
 		}
 	}
 	$caption = nl2br($image['txt']);
 	$data .= <<<EOL
 		<div class="Image_Wrapper" data-caption="{$caption}">
-			<a href="{$link}" title="{$caption}" {$grelval}{$dtg}>
+			<a href="{$link}"  data-title="{$caption}" {$grelval}{$dtg}>
 				<img alt="{$caption}" src="{$image['thumb']}" data-width="{$image['width']}" data-height="{$image['height']}" width="{$image['width']}" height="{$image['height']}" />
 			</a>
 		</div>
 EOL;
 }
 $data .= '</div>';
-$addcaption = ($srz_page['hovercaption']) ? '.collageCaption({behaviour_c: '.$srz_page['hovercaptiontype'].'})' : '';
+if($set) {
+	$addcaption = ( $srz_page['hovercaption'] ) ? '.collageCaption({behaviour_c: ' . $srz_page['hovercaptiontype'] . '})' : '';
+}
+else{
+	$addcaption = ( $srz_page['hovercaption'] ) ? '.collageCaption({behaviour_c: ' . $srz_page['hovercaptiontypecover'] . '})' : '';
+}
 
 $data .= <<<EOL
 <script>
